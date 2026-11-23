@@ -168,3 +168,32 @@
 - GitHub Actions has not run yet. P07 watches that result.
 
 **Next phase:** P07
+
+## P07 — Publish and verify on GitHub
+
+**Phase and status:** P07 PASS
+
+**Files changed:**
+
+- Tag `v0.1.0` on the first green commit. This progress note is a later commit and is not the tag.
+
+**Commands and results:**
+
+- `gh pr checks 1` and `gh run list --branch cursor/truemeasure-mvp-ddd4` showed run [45112397993](https://github.com/Harry0052/truemeasure/actions/runs/45112397993) completed with conclusion `success`. Jobs `build` (52s) and `sanitizer` (1m8s) both passed. Head SHA `fe16563c38e633fb476197709bd86ba0ada7c2b3`.
+- `git tag -a v0.1.0 fe16563c38e633fb476197709bd86ba0ada7c2b3` and `git push origin v0.1.0`. `git ls-remote` shows `v0.1.0^{}` at that SHA.
+- Fresh public clone: `git clone --depth 1 --branch v0.1.0 https://github.com/Harry0052/truemeasure.git`. `git describe --tags --exact-match` printed `v0.1.0` at `fe16563c38e633fb476197709bd86ba0ada7c2b3`.
+- README configure and build, then `./build/truemeasure measure --request fixtures/requests/oblique_60mm.json --json-out out/oblique_60mm.json --annotate out/oblique_60mm.png`.
+- Observed label `60.0 mm [59.2, 60.8] mm`, `distance_mm` 60.0, interval low 59.2 and high 60.8. Stdout JSON matched the report file.
+- Pull request https://github.com/Harry0052/truemeasure/pull/1 remains open. Main was not merged.
+
+**Artifact paths:**
+
+- https://github.com/Harry0052/truemeasure/releases/tag/v0.1.0
+- https://github.com/Harry0052/truemeasure/actions/runs/45112397993
+- https://github.com/Harry0052/truemeasure/pull/1
+
+**Open issues:**
+
+- The repository owner merges the pull request. No bench photographs are in the release.
+
+**Next phase:** none. The playbook ends at P07.
