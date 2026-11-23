@@ -1,0 +1,55 @@
+{
+  "schema": "truemeasure.board",
+  "schema_version": 1,
+  "board_id": "tm-board-v1",
+  "units": "millimetre",
+  "origin": "top_left_x_right_y_down",
+  "dictionary": "DICT_4X4_50",
+  "marker_size_mm": 28.0,
+  "width_mm": 240.0,
+  "height_mm": 170.0,
+  "markers": [
+    {
+      "id": 0,
+      "x_mm": 12.0,
+      "y_mm": 12.0,
+      "corner": "top_left"
+    },
+    {
+      "id": 4,
+      "x_mm": 74.0,
+      "y_mm": 12.0,
+      "corner": "top_left"
+    },
+    {
+      "id": 6,
+      "x_mm": 136.0,
+      "y_mm": 12.0,
+      "corner": "top_left"
+    },
+    {
+      "id": 1,
+      "x_mm": 198.0,
+      "y_mm": 12.0,
+      "corner": "top_left"
+    },
+    {
+      "id": 2,
+      "x_mm": 12.0,
+      "y_mm": 130.0,
+      "corner": "top_left"
+    },
+    {
+      "id": 5,
+      "x_mm": 106.0,
+      "y_mm": 130.0,
+      "corner": "top_left"
+    },
+    {
+      "id": 3,
+      "x_mm": 198.0,
+      "y_mm": 130.0,
+      "corner": "top_left"
+    }
+  ]
+}

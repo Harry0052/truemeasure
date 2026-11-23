@@ -1,0 +1,8 @@
+build/
+build-san/
+out/
+.playwright-mcp/
+cmake-build-*/
+.cache/
+*.user
+compile_commands.json

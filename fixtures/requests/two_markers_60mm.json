@@ -1,0 +1,26 @@
+{
+  "schema": "truemeasure.request",
+  "schema_version": 1,
+  "board_id": "tm-board-v1",
+  "board_file": "../boards/tm-board-v1.json",
+  "image": "../images/two_markers_60mm.png",
+  "coplanar_attestation": true,
+  "points_px": [
+    {
+      "id": "a",
+      "x": 641.4718,
+      "y": 624.1371
+    },
+    {
+      "id": "b",
+      "x": 934.9789,
+      "y": 645.8333
+    }
+  ],
+  "camera": {
+    "model": "none"
+  },
+  "scale_tolerance_mm": 0.3,
+  "endpoint_click_tolerance_px": 1.0,
+  "marker_corner_tolerance_px": 0.5
+}
