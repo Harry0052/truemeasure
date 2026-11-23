@@ -1,0 +1,77 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Install toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++ cmake ninja-build clang-format \
+            libopencv-dev libopencv-contrib-dev nlohmann-json3-dev
+      - name: Format
+        run: clang-format --dry-run -Werror src/*.cpp include/truemeasure/*.hpp tests/test_main.cpp
+      - name: Configure
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=g++
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+      - name: Demo
+        run: |
+          ./build/truemeasure measure \
+            --request fixtures/requests/oblique_60mm.json \
+            --json-out out/oblique_60mm.json \
+            --annotate out/oblique_60mm.png
+          python3 - << 'PY'
+          import json
+          result = json.load(open("out/oblique_60mm.json"))
+          assert result["status"] == "measured"
+          assert result["units"] == "millimetre"
+          assert abs(result["distance_mm"] - 60.0) <= 1.0
+          interval = result["sensitivity_interval_mm"]
+          assert interval["low"] <= 60.0 <= interval["high"]
+          assert result["distance_mm"] == 60.0 or "60." in result["label"]
+          print(result["label"])
+          PY
+      - name: Upload demo
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: demo
+          path: |
+            out/oblique_60mm.json
+            out/oblique_60mm.png
+          if-no-files-found: error
+
+  sanitizer:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Install toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++ cmake ninja-build \
+            libopencv-dev libopencv-contrib-dev nlohmann-json3-dev
+      - name: Configure
+        run: cmake -S . -B build-san -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=g++ -DTRUEMEASURE_SANITIZERS=ON
+      - name: Build
+        run: cmake --build build-san
+      - name: Test
+        env:
+          ASAN_OPTIONS: detect_leaks=1:halt_on_error=1
+          UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+        run: ctest --test-dir build-san --output-on-failure

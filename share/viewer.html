@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TrueMeasure</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1c1915;
+      --paper: #f4f1ea;
+      --panel: #fffdf8;
+      --line: #d5cec2;
+      --green: #0f6e56;
+      --focus: #0b4f8a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    header, main { padding: 16px; }
+    header { border-bottom: 1px solid var(--line); }
+    h1 { font-family: Georgia, "Iowan Old Style", serif; font-size: 1.6rem; margin: 0 0 4px; }
+    p { line-height: 1.45; }
+    main { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
+    .stage { position: relative; background: var(--panel); border: 1px solid var(--line); }
+    #photo { display: block; width: 100%; height: auto; }
+    svg { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+    svg:focus { outline: 3px solid var(--focus); outline-offset: 2px; }
+    aside { background: var(--panel); border: 1px solid var(--line); padding: 12px; }
+    button, label { font: inherit; }
+    button {
+      background: var(--green);
+      color: white;
+      border: 0;
+      padding: 10px 14px;
+      min-height: 44px;
+    }
+    button:focus, input:focus { outline: 3px solid var(--focus); outline-offset: 2px; }
+    .points { display: flex; gap: 8px; flex-wrap: wrap; }
+    .points button[aria-pressed="true"] { outline: 3px solid var(--focus); }
+    #status { min-height: 4.5rem; white-space: pre-wrap; }
+    @media (max-width: 720px) {
+      main { grid-template-columns: 1fr; padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>TrueMeasure</h1>
+    <p>Place two points on the flat object. The board markers and both points must lie on one plane. The tool withholds a distance when that check, the markers, or the valid region fail.</p>
+  </header>
+  <main>
+    <div class="stage">
+      <img id="photo" alt="Reference board photograph. Activate the overlay, then click or use arrow keys to place point A and point B." src="/sample.png">
+      <svg id="overlay" tabindex="0" role="application" aria-label="Measurement points. Press 1 or 2 to select a point, arrows to nudge the selected point by one pixel, and Enter on Measure when both points and the plane check are set."></svg>
+    </div>
+    <aside>
+      <div class="points">
+        <button type="button" id="pick-a" aria-pressed="true">Point A</button>
+        <button type="button" id="pick-b" aria-pressed="false">Point B</button>
+      </div>
+      <p id="readout">A: not set. B: not set.</p>
+      <label><input id="plane" type="checkbox"> I attest both points and the reference board are on the same plane.</label>
+      <p><button type="button" id="measure">Measure</button></p>
+      <div id="status" role="status" aria-live="polite">Load the photograph, set two points, attest the plane, then measure.</div>
+      <p>Units are millimetres. The interval is a sensitivity range from the declared click, marker, and scale bounds. It is not a certified tolerance. Arrow keys nudge the selected point. Tab reaches each control.</p>
+    </aside>
+  </main>
+  <script>
+    const photo = document.getElementById("photo");
+    const overlay = document.getElementById("overlay");
+    const readout = document.getElementById("readout");
+    const status = document.getElementById("status");
+    const pickA = document.getElementById("pick-a");
+    const pickB = document.getElementById("pick-b");
+    const points = { a: null, b: null };
+    let selected = "a";
+
+    function select(which) {
+      selected = which;
+      pickA.setAttribute("aria-pressed", which === "a" ? "true" : "false");
+      pickB.setAttribute("aria-pressed", which === "b" ? "true" : "false");
+    }
+    pickA.addEventListener("click", () => select("a"));
+    pickB.addEventListener("click", () => select("b"));
+
+    function imagePoint(event) {
+      const rect = photo.getBoundingClientRect();
+      const x = (event.clientX - rect.left) * photo.naturalWidth / rect.width;
+      const y = (event.clientY - rect.top) * photo.naturalHeight / rect.height;
+      return { x, y };
+    }
+
+    function render() {
+      const rect = photo.getBoundingClientRect();
+      overlay.setAttribute("viewBox", `0 0 ${photo.naturalWidth} ${photo.naturalHeight}`);
+      overlay.innerHTML = "";
+      for (const [id, point] of Object.entries(points)) {
+        if (!point) continue;
+        const mark = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        mark.setAttribute("cx", point.x);
+        mark.setAttribute("cy", point.y);
+        mark.setAttribute("r", id === selected ? "8" : "5");
+        mark.setAttribute("fill", id === "a" ? "#0f6e56" : "#8a3b12");
+        overlay.appendChild(mark);
+        const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        label.setAttribute("x", point.x + 10);
+        label.setAttribute("y", point.y - 10);
+        label.setAttribute("fill", "#1c1915");
+        label.setAttribute("font-size", "28");
+        label.textContent = id.toUpperCase();
+        overlay.appendChild(label);
+      }
+      if (points.a && points.b) {
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", points.a.x);
+        line.setAttribute("y1", points.a.y);
+        line.setAttribute("x2", points.b.x);
+        line.setAttribute("y2", points.b.y);
+        line.setAttribute("stroke", "#0b4f8a");
+        line.setAttribute("stroke-width", "3");
+        overlay.appendChild(line);
+      }
+      const fmt = (point) => point ? `${point.x.toFixed(1)}, ${point.y.toFixed(1)}` : "not set";
+      readout.textContent = `A: ${fmt(points.a)}. B: ${fmt(points.b)}. Selected ${selected.toUpperCase()}.`;
+      void rect;
+    }
+
+    overlay.addEventListener("click", (event) => {
+      points[selected] = imagePoint(event);
+      selected = selected === "a" && !points.b ? "b" : selected;
+      select(selected);
+      render();
+      status.textContent = readout.textContent;
+    });
+    overlay.addEventListener("keydown", (event) => {
+      if (!points[selected]) {
+        points[selected] = { x: photo.naturalWidth / 2, y: photo.naturalHeight / 2 };
+      }
+      const step = event.shiftKey ? 10 : 1;
+      if (event.key === "1") select("a");
+      else if (event.key === "2") select("b");
+      else if (event.key === "ArrowLeft") points[selected].x -= step;
+      else if (event.key === "ArrowRight") points[selected].x += step;
+      else if (event.key === "ArrowUp") points[selected].y -= step;
+      else if (event.key === "ArrowDown") points[selected].y += step;
+      else return;
+      event.preventDefault();
+      points[selected].x = Math.max(0, Math.min(photo.naturalWidth - 1, points[selected].x));
+      points[selected].y = Math.max(0, Math.min(photo.naturalHeight - 1, points[selected].y));
+      render();
+      status.textContent = readout.textContent;
+    });
+    photo.addEventListener("load", render);
+    window.addEventListener("resize", render);
+
+    document.getElementById("measure").addEventListener("click", async () => {
+      if (!points.a || !points.b) {
+        status.textContent = "Set both points before measuring.";
+        return;
+      }
+      status.textContent = "Measuring.";
+      const response = await fetch("/measure", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          coplanar_attestation: document.getElementById("plane").checked,
+          points_px: [
+            { id: "a", x: points.a.x, y: points.a.y },
+            { id: "b", x: points.b.x, y: points.b.y }
+          ]
+        })
+      });
+      const body = await response.json();
+      if (body.status === "measured") {
+        status.textContent = `${body.label}. ${body.message}`;
+      } else {
+        status.textContent = `${body.status}: ${body.category || "input"}. ${body.message || ""}`;
+      }
+    });
+  </script>
+</body>
+</html>

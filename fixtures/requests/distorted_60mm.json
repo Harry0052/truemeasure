@@ -1,0 +1,37 @@
+{
+  "schema": "truemeasure.request",
+  "schema_version": 1,
+  "board_id": "tm-board-v1",
+  "board_file": "../boards/tm-board-v1.json",
+  "image": "../images/distorted_60mm.png",
+  "coplanar_attestation": true,
+  "points_px": [
+    {
+      "id": "a",
+      "x": 641.7832,
+      "y": 624.0897
+    },
+    {
+      "id": "b",
+      "x": 934.7693,
+      "y": 645.7621
+    }
+  ],
+  "camera": {
+    "model": "opencv_pinhole",
+    "fx": 1400.0,
+    "fy": 1400.0,
+    "cx": 800.0,
+    "cy": 600.0,
+    "distortion": [
+      -0.15,
+      0.02,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "scale_tolerance_mm": 0.3,
+  "endpoint_click_tolerance_px": 1.0,
+  "marker_corner_tolerance_px": 0.5
+}

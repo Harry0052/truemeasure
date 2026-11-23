@@ -1,0 +1,169 @@
+{
+  "name": "truemeasure-fixtures",
+  "version": 1,
+  "seed": 20261123,
+  "seed_note": "Revision token. Generation is deterministic and does not draw random samples.",
+  "generator": "tools/generate_fixtures.py",
+  "opencv": "4.6.0",
+  "dictionary": {
+    "name": "DICT_4X4_50",
+    "renderer": "cv2.aruco.drawMarker",
+    "provenance": "Marker bits are rendered by OpenCV at generation time. No external marker image is stored or fetched.",
+    "license": "Apache-2.0",
+    "source": "https://github.com/opencv/opencv"
+  },
+  "reference_segment_mm": {
+    "a": [
+      90.0,
+      85.0
+    ],
+    "b": [
+      150.0,
+      85.0
+    ],
+    "distance_mm": 60.0,
+    "method": "Euclidean distance of the board coordinates before projection."
+  },
+  "files": [
+    {
+      "path": "fixtures/boards/tm-board-v1.json",
+      "bytes": 943,
+      "sha256": "bf292dccddff88814e5b6d91d5180fca29dfa65d4427a110588ad90c7c4fd682"
+    },
+    {
+      "path": "fixtures/images/blank_60mm.png",
+      "bytes": 9109,
+      "sha256": "b6db65678a5fae71148ccc65714268aaece183333a48253fe6d8c4aef78770b7"
+    },
+    {
+      "path": "fixtures/images/blurred_60mm.png",
+      "bytes": 316350,
+      "sha256": "eebef6f3b43616ca432ed3afae5972b7656d0dbcc647c04f1ec63c42af7bc664"
+    },
+    {
+      "path": "fixtures/images/cropped_60mm.png",
+      "bytes": 34099,
+      "sha256": "da89d938a84b82e243e20214db57b66ceb03cdcbee7f15a89305c531a34c326e"
+    },
+    {
+      "path": "fixtures/images/distorted_60mm.png",
+      "bytes": 82879,
+      "sha256": "7f7e6a3cb70d5446b5b0f27187ffda537de53896c09789b4da38ccfc666fc72e"
+    },
+    {
+      "path": "fixtures/images/lowres_60mm.png",
+      "bytes": 20620,
+      "sha256": "95e51fb677fd03d4b7abfd6a9bb036531bfb2ae525f3cf97ced7a862dc5b5083"
+    },
+    {
+      "path": "fixtures/images/malformed.png",
+      "bytes": 10,
+      "sha256": "91a3072fe20c0552bfa0c3c90362af3d455a5fd4b9ec5c0c3035ade2b2258d70"
+    },
+    {
+      "path": "fixtures/images/oblique_60mm.png",
+      "bytes": 52144,
+      "sha256": "6ab405c5af35253bd8dc46733fbff960b8027c33afb7d3d6b0d8e9ec134cdd7d"
+    },
+    {
+      "path": "fixtures/images/oblique_steep_60mm.png",
+      "bytes": 53824,
+      "sha256": "ba6992a68797c1af33da5606e36da9447393b31e2c8a7c76cf7b5f20f758c393"
+    },
+    {
+      "path": "fixtures/images/rotated_60mm.png",
+      "bytes": 62567,
+      "sha256": "6f32c785bc1b9c247335db2903d057e658c1fcd70e9d02cded45a7da7ab7afb1"
+    },
+    {
+      "path": "fixtures/images/top_row_60mm.png",
+      "bytes": 42047,
+      "sha256": "1b7f9eb6baebe72ed5ecc729c912435fae2aae3cfe6c05c7858b1b3c6fef34db"
+    },
+    {
+      "path": "fixtures/images/two_markers_60mm.png",
+      "bytes": 34041,
+      "sha256": "76cc2409b44d241882107c1abfbc706d32be217f88058a93f1955d627db144a9"
+    },
+    {
+      "path": "fixtures/requests/blank_60mm.json",
+      "bytes": 513,
+      "sha256": "a4478da17d3d187b8414e93a0933378feb2984632aa3daedb3c518858916f032"
+    },
+    {
+      "path": "fixtures/requests/blurred_60mm.json",
+      "bytes": 515,
+      "sha256": "6a755e630a9d3bd8c354b43de034296dfd0454abfd3dabec331d47fe084be435"
+    },
+    {
+      "path": "fixtures/requests/cropped_60mm.json",
+      "bytes": 515,
+      "sha256": "827b049c7674abcdb20a5f16d6ba323476f2b5f0798bb4fd58c1715b168900b4"
+    },
+    {
+      "path": "fixtures/requests/distorted_60mm.json",
+      "bytes": 681,
+      "sha256": "2ed6d152556eba9bc4871e7f1d520957d89bb9d038479b95b6d27e9f67bd5299"
+    },
+    {
+      "path": "fixtures/requests/distorted_undeclared.json",
+      "bytes": 517,
+      "sha256": "3fe7f87b99af6083e3bc6e8fe2a6d247f6938bd4436bc7057e8426437eed4a94"
+    },
+    {
+      "path": "fixtures/requests/lowres_60mm.json",
+      "bytes": 514,
+      "sha256": "0acdef85ac5a5a115dfd1d7b2d792f4ebbddd858f12d96aa8b545cad200b152f"
+    },
+    {
+      "path": "fixtures/requests/malformed_image.json",
+      "bytes": 496,
+      "sha256": "62843dd2e7faae85234dba56bd4fcdf9eb82996d884883d1ebff1f647201214a"
+    },
+    {
+      "path": "fixtures/requests/missing_points.json",
+      "bytes": 61,
+      "sha256": "752d2709c8b776bcd6a050eba115677dcbf281d706baf0e56097c7ced60a8c6f"
+    },
+    {
+      "path": "fixtures/requests/nonfinite.json",
+      "bytes": 512,
+      "sha256": "6310c1132758f7c8444f89f60f8cc7ff57ddc713b43ca9f0e7cee63fe3229783"
+    },
+    {
+      "path": "fixtures/requests/oblique_60mm.json",
+      "bytes": 515,
+      "sha256": "c522111a1b0096022b9214c3c75b867665524e98c83d40f2949cfeb85b3b4732"
+    },
+    {
+      "path": "fixtures/requests/oblique_steep_60mm.json",
+      "bytes": 521,
+      "sha256": "c2410f3e52dd659cc79f0d6a9c8afbff5f21ae8c002eeb14dc384ee043c6a5e5"
+    },
+    {
+      "path": "fixtures/requests/outside_board.json",
+      "bytes": 515,
+      "sha256": "b50862f8747efc8900e55559f97bf0e128892fc4142f4366c9c70f1e0f6a389a"
+    },
+    {
+      "path": "fixtures/requests/rotated_60mm.json",
+      "bytes": 515,
+      "sha256": "f1959480291e2b2925f18f64e128bdb152270bc89c289a46504a63f4e9863cfd"
+    },
+    {
+      "path": "fixtures/requests/top_row_60mm.json",
+      "bytes": 515,
+      "sha256": "02073723ef4eb0cd2e34807f7db65f4e430f4e6233ec64ba881a25c43decfd1e"
+    },
+    {
+      "path": "fixtures/requests/two_markers_60mm.json",
+      "bytes": 519,
+      "sha256": "0401b66641249d29b67fab4b0c7e4cb44d0a70541120c3bae219da6bfd62b625"
+    },
+    {
+      "path": "fixtures/requests/unattested.json",
+      "bytes": 516,
+      "sha256": "f6b6b4d9646e1696bf2740f7f4e05fdb8d3a50f112a9645632b9f2055aaa6521"
+    }
+  ]
+}
